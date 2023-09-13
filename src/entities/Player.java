@@ -6,6 +6,9 @@ public abstract class Player {
 	
 	protected PlayerChoice choice;
 	protected int score;
+	
+	public Player() {
+	}
 
 	public Player(PlayerChoice choice, int score) {
 		this.choice = choice;

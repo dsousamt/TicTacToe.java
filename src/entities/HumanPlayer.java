@@ -5,6 +5,10 @@ import enums.PlayerChoice;
 public class HumanPlayer extends Player{
 	
 	private String name;
+	
+	public HumanPlayer() {
+		super();
+	}
 
 	public HumanPlayer(PlayerChoice choice, int score, String name) {
 		super(choice, score);
