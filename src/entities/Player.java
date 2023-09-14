@@ -1,27 +1,12 @@
 package entities;
 
-import enums.PlayerChoice;
-
 public abstract class Player {
 	
-	protected PlayerChoice choice;
+	protected int columnValue;
+	protected int rowValue;
 	protected int score;
 	
-	public Player() {
-	}
-
-	public Player(PlayerChoice choice, int score) {
-		this.choice = choice;
-		this.score = score;
-	}
-
-	public PlayerChoice getChoice() {
-		return choice;
-	}
-
-	public void setChoice(PlayerChoice choice) {
-		this.choice = choice;
-	}
+	public Player() {}
 
 	public int getScore() {
 		return score;
@@ -31,4 +16,15 @@ public abstract class Player {
 		this.score = score;
 	}	
 	
+	public int getColumnValue() {
+		return columnValue;
+	}
+
+	public int getRowValue() {
+		return rowValue;
+	}
+
+	public abstract void play();
+
+	public void play(int column, int row) {}
 }

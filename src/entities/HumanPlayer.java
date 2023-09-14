@@ -1,18 +1,11 @@
 package entities;
 
-import enums.PlayerChoice;
-
 public class HumanPlayer extends Player{
 	
 	private String name;
 	
 	public HumanPlayer() {
 		super();
-	}
-
-	public HumanPlayer(PlayerChoice choice, int score, String name) {
-		super(choice, score);
-		this.name = name;
 	}
 
 	public String getName() {
@@ -22,5 +15,14 @@ public class HumanPlayer extends Player{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Override
+	public void play(int column, int row) {
+		super.columnValue = column;
+		super.rowValue = row;
+	}
+
+	@Override
+	public void play() {}
 
 }
