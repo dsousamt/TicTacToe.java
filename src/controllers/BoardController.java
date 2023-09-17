@@ -1,6 +1,7 @@
 package controllers;
 
 import enums.PlayerChoice;
+import exceptions.InvalidOptionException;
 import view.BoardView;
 
 public class BoardController {	

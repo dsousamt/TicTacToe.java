@@ -1,5 +1,7 @@
 package entities;
 
+import exceptions.InvalidOptionException;
+
 public class HumanPlayer extends Player{
 	
 	private String name;
@@ -17,9 +19,12 @@ public class HumanPlayer extends Player{
 	}
 	
 	@Override
-	public void play(int row, int column) {
-		super.columnValue = column;
-		super.rowValue = row;
+	public void play(int r, int c) {
+		super.columnValue = c;
+		super.rowValue = r;
+		if ((r < 0 || r > 2) || (c < 0 || c > 2)) {
+			throw new InvalidOptionException("As coordenadas não são válidas");
+		}
 	}
 
 	@Override

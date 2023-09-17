@@ -6,6 +6,7 @@ import entities.CPUPlayer;
 import entities.HumanPlayer;
 import entities.Menu;
 import enums.PlayerChoice;
+import exceptions.InvalidOptionException;
 
 public class GameController {
 	
@@ -24,9 +25,6 @@ public class GameController {
 			menu.setOption(sc.nextInt());
 			sc.skip("\\R");
 			
-			if (menu.getOption() == 0) {
-				System.exit(0);
-			}
 			
 			switch (menu.getOption()) {
 			case 1:
@@ -41,6 +39,11 @@ public class GameController {
 				this.setUserName();
 				System.out.println("Nome alterado para " + humanPlayer.getName());
 				break;
+			} 
+			if (menu.getOption() == 0) {
+				System.exit(0);
+			} else {
+				throw new InvalidOptionException("Opção inválida");
 			}
 		}
 	}
@@ -64,13 +67,15 @@ public class GameController {
 	
 	public void newRound() {
 		
-		boardController.showBoard();
+		boardController.showBoard();		
 		System.out.print("Qual é a sua jogada (Linha, Coluna)? ");
 		System.out.print("\nLinha: ");
 		int row = this.sc.nextInt();
 		System.out.print("\nColuna: ");
 		int col = this.sc.nextInt();
 		humanPlayer.play(row, col);
+		
+
 		PlayerChoice userChoice = humanPlayer.getChoice();
 		
 		int userRow = humanPlayer.getRow(), userCol = humanPlayer.getCol();		
@@ -117,12 +122,15 @@ public class GameController {
 		} else if (choice.equalsIgnoreCase(PlayerChoice.O.value)) {
 			humanPlayer.setChoice(PlayerChoice.O);
 			cpuPlayer.setChoice(PlayerChoice.X);
+		} else {
+			throw new InvalidOptionException("Apenas 'X' ou 'O' é permitido");
 		}
 	}
 	
 	private void changeDifficulty() {
 		System.out.print("Qual o nível de dificuldade desejado (Easy / Hard)? ");		
 		cpuPlayer.defineComputerLevel(this.sc.next());
+		throw new InvalidOptionException("Escolha entre 'Easy' e 'Hard'");
 	}
 	
 	private void setUserName() {
