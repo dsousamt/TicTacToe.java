@@ -20,8 +20,8 @@ public class GameController {
 		System.out.print("Qual o seu nome? ");
 		humanPlayer.setName(this.sc.nextLine());
 		
-		System.out.print("Qual o nível de dificuldade desejado (Easy / Hard)? ");		
-		cpuPlayer.defineComputerLevel(this.sc.next());
+		/*System.out.print("Qual o nível de dificuldade desejado (Easy / Hard)? ");		
+		cpuPlayer.defineComputerLevel(this.sc.next());*/
 		
 		System.out.print("A partida terá quantas rodadas? ");
 		int nRound = sc.nextInt();
@@ -36,14 +36,19 @@ public class GameController {
 	
 	public void newRound() {
 		boardController.showBoard();
-		System.out.print("Qual é a sua jogada (Coluna, Linha)? ");
+		System.out.print("Qual é a sua jogada (Linha, Coluna)? ");
 		humanPlayer.play(this.sc.nextInt(), this.sc.nextInt());
 		this.sc.skip("\\R");
 		
-		int xHuman = humanPlayer.getColumnValue();
-		int yHuman = humanPlayer.getRowValue();
-		if (boardController.isPossible(xHuman, yHuman)) {
-			boardController.changeBoard(yHuman, xHuman);
+		int columnHuman = humanPlayer.getColumnValue();
+		int rowHuman = humanPlayer.getRowValue();
+		if (boardController.isPossible(rowHuman, columnHuman)) {
+			boardController.addPlayerChoice(rowHuman, columnHuman, "X");
+			/*if (boardController.verifyWin("X")) {
+				System.out.println("Você venceu");
+				boardController.showBoard();
+				endGame = true;
+			}*/
 		} else {
 			System.out.print("Jogada impossível");
 			this.newRound();
@@ -53,22 +58,28 @@ public class GameController {
 		boardController.showBoard();
 		
 		cpuPlayer.play();
-		while (!boardController.isPossible(cpuPlayer.getColumnValue(), cpuPlayer.getRowValue())) {
-			cpuPlayer.play();			
+		boolean randomLoop = boardController.isPossible(cpuPlayer.getRowValue(), cpuPlayer.getColumnValue());
+		while (!randomLoop) {
+			cpuPlayer.play();
+			if (boardController.isPossible(cpuPlayer.getRowValue(), cpuPlayer.getColumnValue())) {
+				break;
+			}
 		}
 		
-		boardController.changeBoard(cpuPlayer.getColumnValue(), cpuPlayer.getRowValue());
-		
+		boardController.addPlayerChoice(cpuPlayer.getRowValue(), cpuPlayer.getColumnValue(), "O");
 		System.out.print("CPU jogou");
 		
-		if (boardController.verifyWin()) {
-			System.out.println("Houve um vencedor");
+		boardController.showBoard();
+		
+		/*if (boardController.verifyWin("O")) {
+			System.out.println("Você perdeu");
 			boardController.showBoard();
 			endGame = true;
-		} else if (boardController.verifyTie()) {
+		} else*/if (boardController.verifyTie()) {
 			System.out.println("Empate - Ninguém ganhou");	
 			boardController.showBoard();
 			endGame = true;
 		}
+		
 	}
 }

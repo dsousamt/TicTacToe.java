@@ -21,15 +21,17 @@ public class CPUPlayer extends Player{
 	}
 	
 	public int randomChoice() {
-		return new Random().ints(0,2).findFirst().getAsInt();
+		//return new Random().ints(0,2).findFirst().getAsInt();
+		return new Random().nextInt(0, 3);
 	}
 	
 	@Override
-	public void play(int column, int row) {}
+	public void play(int row, int column) {}
 
 	@Override
 	public void play() {
 		super.columnValue = randomChoice();
 		super.rowValue = randomChoice();
+		System.out.println(rowValue + " " + columnValue);
 	}
 }

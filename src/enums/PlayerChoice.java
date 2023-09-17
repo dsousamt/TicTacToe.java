@@ -2,13 +2,13 @@ package enums;
 
 public enum PlayerChoice {
 	
-	OPTION1("x"),
-	OPTION2("o");
+	X("X"),
+	O("O");
 	
-	public final String label;
+	public final String value;
 
-	private PlayerChoice(String label) {
-		this.label = label;
+	private PlayerChoice(String value) {
+		this.value = value;
 	}	
 	
 }

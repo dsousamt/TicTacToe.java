@@ -17,7 +17,7 @@ public class HumanPlayer extends Player{
 	}
 	
 	@Override
-	public void play(int column, int row) {
+	public void play(int row, int column) {
 		super.columnValue = column;
 		super.rowValue = row;
 	}
