@@ -38,7 +38,7 @@ public class GameController {
 				break;
 			case 3:
 				this.setUserName();
-				System.out.println("Nome alterado!");
+				System.out.println("Nome alterado para " + humanPlayer.getName());
 				break;
 			}
 		}
@@ -50,18 +50,13 @@ public class GameController {
 			this.setUserName();
 		}
 		
-		System.out.print("Deseja jogar quantas partidas? ");
-		int nRound = sc.nextInt();
-		for (int i = 1; i <= nRound; i++) {			
-			System.out.println("\nPartida " + i + ", " + humanPlayer.getName());
-			this.askChoice();
-			while (stillPlaying) {
-				this.newRound();				
-				if (stillPlaying == false) {
-					break;
-				}
+		System.out.println("\nTudo pronto, " + humanPlayer.getName());
+		this.askChoice();
+		while (stillPlaying) {
+			this.newRound();				
+			if (stillPlaying == false) {
+				break;
 			}
-			stillPlaying = true;
 		}
 		this.startGame();
 	}
