@@ -30,6 +30,7 @@ public class GameController {
 			
 			switch (menu.getOption()) {
 			case 1:
+				boardController.resetBoard();
 				this.newGame();
 				break;
 			case 2:
@@ -45,7 +46,7 @@ public class GameController {
 	}
 
 	public void newGame() {
-		
+		stillPlaying = true;
 		if (humanPlayer.getName() == null) {
 			this.setUserName();
 		}
@@ -57,7 +58,7 @@ public class GameController {
 			if (stillPlaying == false) {
 				break;
 			}
-		}
+		}		
 		this.startGame();
 	}
 	
@@ -65,36 +66,33 @@ public class GameController {
 		
 		boardController.showBoard();
 		System.out.print("Qual é a sua jogada (Linha, Coluna)? ");
-		humanPlayer.play(this.sc.nextInt(), this.sc.nextInt());
+		System.out.print("\nLinha: ");
+		int row = this.sc.nextInt();
+		System.out.print("\nColuna: ");
+		int col = this.sc.nextInt();
+		humanPlayer.play(row, col);
 		PlayerChoice userChoice = humanPlayer.getChoice();
-		this.sc.skip("\\R");
 		
 		int userRow = humanPlayer.getRow(), userCol = humanPlayer.getCol();		
 		if (boardController.isPossible(userRow, userCol)) {
 			boardController.addPlayerChoice(userRow, userCol, userChoice);
+			isTheEnd(userChoice);
 		}
 		
-		if (!isTheEnd(userChoice)) {
+		cpuPlayer.play();
+		int cpuRow = cpuPlayer.getRow(), cpuCol = cpuPlayer.getCol();
+		boolean possibleChoice = boardController.isPossible(cpuRow, cpuCol);
+		while (possibleChoice != true) {
 			cpuPlayer.play();
-			int cpuRow = cpuPlayer.getRow(), cpuCol = cpuPlayer.getCol();
-			boolean possibleChoice = boardController.isPossible(cpuRow, cpuCol);
-			while (possibleChoice != true) {
-				cpuPlayer.play();
-				if (boardController.isPossible(cpuRow, cpuCol)) {
-					break;
-				}
-			}		
-			boardController.addPlayerChoice(cpuRow, cpuCol, cpuPlayer.getChoice());
-			if (isTheEnd(cpuPlayer.getChoice())) {
-				stillPlaying = false;
+			if (boardController.isPossible(cpuPlayer.getRow(), cpuPlayer.getCol())) {
+				break;
 			}
-			isTheEnd(cpuPlayer.getChoice());
-		} else {
-			stillPlaying = false;
 		}		
+		boardController.addPlayerChoice(cpuPlayer.getRow(), cpuPlayer.getCol(), cpuPlayer.getChoice());
+		isTheEnd(cpuPlayer.getChoice());
 	}
 	
-	private boolean isTheEnd(PlayerChoice c) {
+	private void isTheEnd(PlayerChoice c) {
 		if (boardController.verifyWin(c.value)) {			
 			if (humanPlayer.getChoice() == c) {
 				System.out.println( "Parabéns " + humanPlayer.getName() + ", você venceu!");				
@@ -102,13 +100,11 @@ public class GameController {
 				System.out.println( "Que pena, você perdeu essa :(");
 			} 
 			boardController.showBoard();
-			return true;
+			stillPlaying = false;
 		} else if (boardController.verifyTie()) {
 			System.out.println("Empate - Ninguém ganhou");
 			boardController.showBoard();
-			return true;
-		} else {
-			return false;
+			stillPlaying = false;
 		}
 	}
 	

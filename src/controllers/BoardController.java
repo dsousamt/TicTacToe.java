@@ -65,4 +65,11 @@ public class BoardController {
 		boardView.getBoard().get(i).set(j, c.value);
 	}
 	
+	public void resetBoard() {
+		for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                boardView.getBoard().get(i).set(j, " ");
+            }
+        }
+	}
 }
