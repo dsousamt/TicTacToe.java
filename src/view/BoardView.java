@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import entities.Board;
 
@@ -15,32 +16,17 @@ public class BoardView {
 	public ArrayList<ArrayList<String>> getBoard() {
 		return board.getBoard();
 	}
-	
 	public void show() {
-		
-		System.out.println();
-		
-		System.out.print("  ");
-		for (int column = 0; column < 3; column++) {
-			System.out.print(column + " ");
-		}
-		
-		System.out.println();
-		
-		int row = 0;
-		for (ArrayList<String> item : board.getBoard()) {
-			
-			System.out.print(row);				
-			
-			System.out.print("|");
-			for (String subItem : item) {
-				System.out.print(subItem + "|");
-			}
-			
-			row++;
-			System.out.println();
-		}
-		
+		System.out.println("\n  0 1 2");
+		AtomicInteger lineCount = new AtomicInteger(0);
+		board.getBoard().stream()
+			.forEach((e) -> {
+				System.out.print(lineCount.getAndIncrement());
+				System.out.print("|");
+				e.forEach((j) -> System.out.print(j + "|"));
+		        System.out.println();
+			});
 		System.out.println();
 	}
+	
 }

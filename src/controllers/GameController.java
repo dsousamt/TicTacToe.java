@@ -99,16 +99,16 @@ public class GameController {
 	
 	private void isTheEnd(PlayerChoice c) {
 		if (boardController.verifyWin(c.value)) {			
+			boardController.showBoard();
 			if (humanPlayer.getChoice() == c) {
 				System.out.println( "Parabéns " + humanPlayer.getName() + ", você venceu!");				
 			} else {
 				System.out.println( "Que pena, você perdeu essa :(");
 			} 
-			boardController.showBoard();
 			stillPlaying = false;
 		} else if (boardController.verifyTie()) {
-			System.out.println("Empate - Ninguém ganhou");
 			boardController.showBoard();
+			System.out.println("Empate - Ninguém ganhou");
 			stillPlaying = false;
 		}
 	}
