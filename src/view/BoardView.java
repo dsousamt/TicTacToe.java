@@ -16,6 +16,7 @@ public class BoardView {
 	public ArrayList<ArrayList<String>> getBoard() {
 		return board.getBoard();
 	}
+	
 	public void show() {
 		System.out.println("\n  0 1 2");
 		AtomicInteger lineCount = new AtomicInteger(0);

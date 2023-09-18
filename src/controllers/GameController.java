@@ -5,136 +5,72 @@ import java.util.Scanner;
 import entities.CPUPlayer;
 import entities.HumanPlayer;
 import entities.Menu;
-import enums.PlayerChoice;
+import entities.Player;
 import exceptions.InvalidOptionException;
 
 public class GameController {
 	
-	private Scanner sc = new Scanner(System.in);	
-	private HumanPlayer humanPlayer = new HumanPlayer();
-	private CPUPlayer cpuPlayer = new CPUPlayer();
-	private BoardController boardController = new BoardController();
+	private BoardController board = new BoardController();
+	private HumanPlayer user = new HumanPlayer();
+	private CPUPlayer cpu = new CPUPlayer();
 	private Menu menu = new Menu();
-	private boolean stillPlaying = true;
-	
-	public GameController() {}
+	private boolean gameRunning;
+	private Scanner sc = new Scanner(System.in);	
 	
 	public void startGame() {
-		while (true) {
-			menu.showMenu();
-			menu.setOption(sc.nextInt());
-			sc.skip("\\R");
-			
-			
-			switch (menu.getOption()) {
-			case 1:
-				boardController.resetBoard();
-				this.newGame();
-				break;
-			case 2:
-				this.changeDifficulty();
-				System.out.println("Dificuldade alterada!");
-				break;
-			case 3:
-				this.setUserName();
-				System.out.println("Nome alterado para " + humanPlayer.getName());
-				break;
-			} 
-			if (menu.getOption() == 0) {
-				System.exit(0);
-			} else {
-				throw new InvalidOptionException("Opção inválida");
-			}
-		}
+		gameRunning = true;
+		menu.showMenu(this, board, user);
 	}
 
 	public void newGame() {
-		stillPlaying = true;
-		if (humanPlayer.getName() == null) {
-			this.setUserName();
-		}
 		
-		System.out.println("\nTudo pronto, " + humanPlayer.getName());
-		this.askChoice();
-		while (stillPlaying) {
-			this.newRound();				
-			if (stillPlaying == false) {
-				break;
-			}
+		if (!user.hasUserName()) {
+			System.out.print("\nQual seu nome? ");
+			user.setName(this.sc.nextLine());
 		}		
+		System.out.print("\n" + user.getName() + ", quer ser X ou O ? ");
+		String userchoice = sc.next();
+		user.defineChoice(userchoice);
+		cpu.defineChoice(userchoice.equalsIgnoreCase("X")? "O" : "X");
+		
+		do {
+			this.newRound();
+		} while (gameRunning == true);
+		
 		this.startGame();
 	}
 	
 	public void newRound() {
 		
-		boardController.showBoard();		
+		board.showBoard();		
 		System.out.print("Qual é a sua jogada (Linha, Coluna)? ");
-		System.out.print("\nLinha: ");
 		int row = this.sc.nextInt();
-		System.out.print("\nColuna: ");
 		int col = this.sc.nextInt();
-		humanPlayer.play(row, col);
+		user.defineCoordinates(row, col);
 		
-
-		PlayerChoice userChoice = humanPlayer.getChoice();
-		
-		int userRow = humanPlayer.getRow(), userCol = humanPlayer.getCol();		
-		if (boardController.isPossible(userRow, userCol)) {
-			boardController.addPlayerChoice(userRow, userCol, userChoice);
-			isTheEnd(userChoice);
-		}
-		
-		cpuPlayer.play();
-		int cpuRow = cpuPlayer.getRow(), cpuCol = cpuPlayer.getCol();
-		boolean possibleChoice = boardController.isPossible(cpuRow, cpuCol);
-		while (possibleChoice != true) {
-			cpuPlayer.play();
-			if (boardController.isPossible(cpuPlayer.getRow(), cpuPlayer.getCol())) {
-				break;
-			}
+		if (board.isPossible(user.getRow(), user.getCol())) {
+			board.addPlayerChoice(user.getRow(), user.getCol(), user.getChoice());
+			gameEnded(user);
 		}		
-		boardController.addPlayerChoice(cpuPlayer.getRow(), cpuPlayer.getCol(), cpuPlayer.getChoice());
-		isTheEnd(cpuPlayer.getChoice());
+		do {
+			cpu.defineCoordinates();
+		} while (board.isPossible(cpu.getRow(), cpu.getCol()) == false);
+		board.addPlayerChoice(cpu.getRow(), cpu.getCol(), cpu.getChoice());
+		
+		gameEnded(cpu);
 	}
 	
-	private void isTheEnd(PlayerChoice c) {
-		if (boardController.verifyWin(c.value)) {			
-			boardController.showBoard();
-			if (humanPlayer.getChoice() == c) {
-				System.out.println( "Parabéns " + humanPlayer.getName() + ", você venceu!");				
-			} else {
-				System.out.println( "Que pena, você perdeu essa :(");
-			} 
-			stillPlaying = false;
-		} else if (boardController.verifyTie()) {
-			boardController.showBoard();
-			System.out.println("Empate - Ninguém ganhou");
-			stillPlaying = false;
+	private void gameEnded(Player p) {		
+		if (board.hasWinner(p) || board.verifyTie()) {
+			board.showBoard();
+			board.finalMessage(p);
+			gameRunning = false;
 		}
 	}
 	
-	private void askChoice() {
-		System.out.print("Você quer ser X ou O ? ");
-		String choice = sc.next();
-		if (choice.equalsIgnoreCase(PlayerChoice.X.value)) {
-			humanPlayer.setChoice(PlayerChoice.X);
-			cpuPlayer.setChoice(PlayerChoice.O);
-		} else if (choice.equalsIgnoreCase(PlayerChoice.O.value)) {
-			humanPlayer.setChoice(PlayerChoice.O);
-			cpuPlayer.setChoice(PlayerChoice.X);
-		} else {
-			throw new InvalidOptionException("Apenas 'X' ou 'O' é permitido");
-		}
-	}
-	
-	private void changeDifficulty() {
+	public void changeLevel() {
 		System.out.print("Qual o nível de dificuldade desejado (Easy / Hard)? ");		
-		cpuPlayer.defineComputerLevel(this.sc.next());
+		cpu.defineComputerLevel(this.sc.next());
 		throw new InvalidOptionException("Escolha entre 'Easy' e 'Hard'");
-	}
-	
-	private void setUserName() {
-		System.out.print("Qual o seu nome? ");
-		humanPlayer.setName(this.sc.nextLine());
 	}
 }

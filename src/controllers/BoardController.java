@@ -1,76 +1,86 @@
 package controllers;
 
+import java.util.List;
+
+import entities.HumanPlayer;
+import entities.Player;
 import enums.PlayerChoice;
-import exceptions.InvalidOptionException;
 import view.BoardView;
 
 public class BoardController {	
 
-	private BoardView boardView = new BoardView();
+	private BoardView board = new BoardView();
 	
 	public void showBoard() {
-		boardView.show();
+		board.show();
 	}
 	
 	public boolean isPossible(int i, int j) {
-		return boardView.getBoard().get(i).get(j).equals(" ");
+		return board.getBoard().get(i).get(j).equals(" ");
 	}
 	
-	public boolean verifyWin(String choice) {
+	public boolean hasWinner(Player p) {
 		
 		for (int row = 0; row < 3; row++) {
-            if (boardView.getBoard().get(row).get(0).equals(choice) &&
-            	boardView.getBoard().get(row).get(1).equals(choice) &&
-            	boardView.getBoard().get(row).get(2).equals(choice)) {
+            if (board.getBoard().get(row).get(0).equals(p.getChoice().value) &&
+            	board.getBoard().get(row).get(1).equals(p.getChoice().value) &&
+            	board.getBoard().get(row).get(2).equals(p.getChoice().value)) {
                 	return true;
             }
         }
 		
 		for (int column = 0; column < 3; column++) {
-            if (boardView.getBoard().get(0).get(column).equals(choice) &&
-            	boardView.getBoard().get(1).get(column).equals(choice) &&
-            	boardView.getBoard().get(2).get(column).equals(choice)) {
+            if (board.getBoard().get(0).get(column).equals(p.getChoice().value) &&
+            	board.getBoard().get(1).get(column).equals(p.getChoice().value) &&
+            	board.getBoard().get(2).get(column).equals(p.getChoice().value)) {
                 	return true;
             }
         }
 		
 		//primary diagonal
-		if (boardView.getBoard().get(0).get(0).equals(choice) &&
-            boardView.getBoard().get(1).get(1).equals(choice) &&
-            boardView.getBoard().get(2).get(2).equals(choice)) {
+		if (board.getBoard().get(0).get(0).equals(p.getChoice().value) &&
+            board.getBoard().get(1).get(1).equals(p.getChoice().value) &&
+            board.getBoard().get(2).get(2).equals(p.getChoice().value)) {
                 return true;
             }
 		
 		//secondary diagonal
-		if (boardView.getBoard().get(0).get(2).equals(choice) &&
-	        boardView.getBoard().get(1).get(1).equals(choice) &&
-	        boardView.getBoard().get(2).get(0).equals(choice)) {
+		if (board.getBoard().get(0).get(2).equals(p.getChoice().value) &&
+	        board.getBoard().get(1).get(1).equals(p.getChoice().value) &&
+	        board.getBoard().get(2).get(0).equals(p.getChoice().value)) {
 	            return true;
 	        }
 		
 		return false;
 	}
 	
+	public void finalMessage(Player p) {
+		if (this.verifyTie()) {
+			System.out.println("Empate - Ninguém ganhou\n\n");
+		}
+		else if (p instanceof HumanPlayer) {
+			System.out.println("Parabéns, você venceu!\n\n");
+		} else{
+			System.out.println("Que pena, você perdeu essa :(\n\n");
+		}
+	}
+	
 	public boolean verifyTie() {
-		for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (boardView.getBoard().get(i).get(j).equals(" ")) {
-                    return false;
-                }
-            }
-        }
-        return true;
+		boolean hasEmptySpaces = board.getBoard().stream()
+				.flatMap(List::stream)
+                .anyMatch(str -> !str.equals(" "));
+		return !hasEmptySpaces;
 	}
 	
 	public void addPlayerChoice(Integer i, Integer j, PlayerChoice c) {
-		boardView.getBoard().get(i).set(j, c.value);
+		board.getBoard().get(i).set(j, c.value);
 	}
 	
 	public void resetBoard() {
 		for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                boardView.getBoard().get(i).set(j, " ");
+                board.getBoard().get(i).set(j, " ");
             }
         }
-	}
+	}	
 }

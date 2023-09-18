@@ -18,8 +18,15 @@ public class HumanPlayer extends Player{
 		this.name = name;
 	}
 	
+	public boolean hasUserName() {
+		if (this.name == null)
+			return false;
+		else
+			return true;
+	}
+	
 	@Override
-	public void play(int r, int c) {
+	public void defineCoordinates(int r, int c) {
 		super.columnValue = c;
 		super.rowValue = r;
 		if ((r < 0 || r > 2) || (c < 0 || c > 2)) {
@@ -28,6 +35,6 @@ public class HumanPlayer extends Player{
 	}
 
 	@Override
-	public void play() {}
+	public void defineCoordinates() {}
 
 }

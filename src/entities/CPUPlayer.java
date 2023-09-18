@@ -25,10 +25,10 @@ public class CPUPlayer extends Player{
 	}
 	
 	@Override
-	public void play(int row, int column) {}
+	public void defineCoordinates(int row, int column) {}
 
 	@Override
-	public void play() {
+	public void defineCoordinates() {
 		super.columnValue = randomChoice();
 		super.rowValue = randomChoice();
 	}
