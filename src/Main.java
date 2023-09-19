@@ -1,3 +1,5 @@
+import java.util.InputMismatchException;
+
 import controllers.GameController;
 import exceptions.InvalidOptionException;
 
@@ -9,6 +11,8 @@ public class Main {
 			ticTacToe.startGame();
 		} catch (InvalidOptionException e) {
 			System.out.println("Erro: " + e.getMessage());
+		} catch (InputMismatchException e) {
+			System.out.println("Erro: Digite umm número inteiro");
 		}	
 		
 	}

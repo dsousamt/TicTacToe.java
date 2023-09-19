@@ -6,7 +6,6 @@ import entities.CPUPlayer;
 import entities.HumanPlayer;
 import entities.Menu;
 import entities.Player;
-import exceptions.InvalidOptionException;
 
 public class GameController {
 	
@@ -71,6 +70,5 @@ public class GameController {
 	public void changeLevel() {
 		System.out.print("Qual o nível de dificuldade desejado (Easy / Hard)? ");		
 		cpu.defineComputerLevel(this.sc.next());
-		throw new InvalidOptionException("Escolha entre 'Easy' e 'Hard'");
 	}
 }

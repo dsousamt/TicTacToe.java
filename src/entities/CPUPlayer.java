@@ -3,6 +3,7 @@ package entities;
 import java.util.Random;
 
 import enums.ComputerLevel;
+import exceptions.InvalidOptionException;
 
 public class CPUPlayer extends Player{
 	
@@ -15,9 +16,12 @@ public class CPUPlayer extends Player{
 	public void defineComputerLevel(String level) {
 		if (level.equalsIgnoreCase("hard")) {
 			this.level = ComputerLevel.HARD;
-		} else {
+		} else if (level.equalsIgnoreCase("easy")) {
 			this.level = ComputerLevel.EASY;			
+		} else {
+			throw new InvalidOptionException("Escolha entre 'Easy' e 'Hard'");
 		}
+		System.out.println("Dificuldade alterada para " + this.level + " !");
 	}
 	
 	public int randomChoice() {

@@ -39,18 +39,16 @@ public class Menu {
 				break;
 			case 2:
 				gameController.changeLevel();
-				System.out.println("Dificuldade alterada!");
 				break;
 			case 3:
 				System.out.print("Qual seu nome? ");
-				user.setName(this.sc.nextLine());
+				user.setName(sc.nextLine());
 				System.out.println("Nome alterado para " + user.getName());
 				break;
 			} 
 			if (this.getOption() == 0) {
-				sc.close();
 				System.exit(0);
-			} else {
+			} else if (this.option < 0 || this.option > 3) {
 				throw new InvalidOptionException("Opção inválida");
 			}
 		}
